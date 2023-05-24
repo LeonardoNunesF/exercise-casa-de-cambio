@@ -7,8 +7,9 @@ import './style.css';
 import './reset.style.css';
 
 const buttonElement = document.querySelector('header form button');
+const searchElement = document.querySelector('header form input');
 
-buttonElement.addEventListener('click', () => {
+function performSearch() {
   const inputElement = document.querySelector('header form input');
   const inputValue = (inputElement.value).toUpperCase();
   if (!inputValue) {
@@ -42,4 +43,13 @@ buttonElement.addEventListener('click', () => {
         confirmButtonText: 'OK',
       });
     });
+}
+buttonElement.addEventListener('click', (performSearch));
+
+searchElement.addEventListener('keydown', (event) => {
+  const ENTER_KEY_CODE = 13;
+  if (event.keyCode === ENTER_KEY_CODE) {
+    event.preventDefault();
+    performSearch();
+  }
 });
