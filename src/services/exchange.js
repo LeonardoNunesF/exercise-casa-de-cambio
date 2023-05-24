@@ -3,7 +3,7 @@ export function fetchExchange(inputValue) {
     .then((response) => response.json())
     .then((result) => {
       const { base } = result;
-      if (base !== inputValue.toUpperCase()) {
+      if (base !== inputValue) {
         throw new Error('Moeda não existente!');
       }
       return result;

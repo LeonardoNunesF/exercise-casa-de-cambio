@@ -10,7 +10,7 @@ const buttonElement = document.querySelector('header form button');
 
 buttonElement.addEventListener('click', () => {
   const inputElement = document.querySelector('header form input');
-  const inputValue = inputElement.value;
+  const inputValue = (inputElement.value).toUpperCase();
   if (!inputValue) {
     Swal.fire({
       title: 'Erro!',
