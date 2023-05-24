@@ -1,11 +1,45 @@
-import './style.css';
+import Swal from 'sweetalert2';
 
-const submit = document.getElementById('search');
-const receive = document.getElementById('moeda');
-const recebeMoeda = (moeda) => {
-  fetch(`https://api.exchangerate.host/latest?base=${moeda}`)
-    .then((response) => console.log(response));
-};
-submit.addEventListener('click', () => {
-  recebeMoeda(receive.value);
+import { renderCoins } from './components';
+import { fetchExchange } from './services/exchange';
+
+import './style.css';
+import './reset.style.css';
+
+const buttonElement = document.querySelector('header form button');
+
+buttonElement.addEventListener('click', () => {
+  const inputElement = document.querySelector('header form input');
+  const inputValue = inputElement.ariaValueMax;
+  if (!inputValue) {
+    Swal.fire({
+      title: 'Erro!',
+      text: 'Você precisa digitar uma moeda!',
+      icon: 'error',
+      confirmButtonText: 'OK',
+    });
+    return;
+  }
+  fetchExchange(inputValue)
+    .then((exchange) => {
+      const { base } = exchange;
+      const { rates } = exchange;
+      const ratesArray = Object.entries(rates);
+      const ratesArrayToObject = ratesArray.map((rateCoin) => {
+        const [name, value] = rateCoin;
+        return {
+          name,
+          value,
+        };
+      });
+      renderCoins(ratesArrayToObject, base);
+    })
+    .catch((error) => {
+      Swal.fire({
+        title: 'Erro!',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    });
 });
